@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RefreshToken;
 use App\Http\Requests\RegisterUser;
+use App\Http\Requests\VerifyEmailRequest;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Http\Responses\Response;
@@ -49,6 +50,26 @@ class AuthController extends Controller
             return Response::Error([], $message);
         }
     }
+        public function resendCode(Request $request)
+    {
+        try {
+            $data = $this->authServices->resendCode($request->email);
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (\Throwable $th) {
+            return Response::Error([], $th->getMessage());
+        }
+    }
+
+    public function verifyCode(VerifyEmailRequest $request)
+    {
+        try {
+            $data = $this->authServices->verifyCode($request->all());
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (\Throwable $th) {
+            return Response::Error([], $th->getMessage());
+        }
+    }
+
     public function refreshToken(RefreshToken $request): JsonResponse
     {
         try {

@@ -14,6 +14,7 @@ use App\Services\NotificationService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\EmailVerificationRepositoryInterface;
 use Illuminate\Validation\ValidationException;
 
 
@@ -22,6 +23,7 @@ class AuthServices
 
     public function __construct(
         private UserRepositoryInterface $userRepo,
+        private EmailVerificationRepositoryInterface $emailRepo,
         private TokenServices $tokenService
     ) {}
 
@@ -30,6 +32,7 @@ class AuthServices
         return DB::transaction(function () use ($request) {
             $user = $this->userRepo->create($request);
             $this->userRepo->assignRole($user, 'user');
+            $this->emailRepo->sendCode($user);
             $data = $this->tokenService->createAuthTokens($user);
             $code = 200;
             $message = 'User created successfully!';
@@ -44,6 +47,11 @@ class AuthServices
                 'email' => ['Invalid credentials'],
             ]);
         }
+         $user->refresh();
+         if (!$user->email_verified_at) {
+            throw new \Exception('يجب تفعيل البريد الإلكتروني قبل تسجيل الدخول');
+        }
+
         $data = $this->tokenService->createAuthTokens($user);
         $message = 'Login successful';
         $code = 200;
@@ -76,6 +84,45 @@ class AuthServices
             'code' => $code
         ];
     }
+
+        public function resendCode($email): array
+    {
+        $data = $this->emailRepo->resendCode($email);
+        $message = 'Resend successfully';
+
+        return [
+            'data'    => $data,
+            'message' => $message,
+            'code'    => 200
+        ];
+    }
+
+        public function verifyCode($request): array
+    {
+        $user = $this->userRepo->findByEmail($request['email']);
+
+        if (!$user) {
+            throw new \Exception('البريد الإلكتروني غير موجود');
+        }
+
+        $ok = $this->emailRepo->verify($user, $request['code']);
+
+        if (!$ok) {
+            throw new \Exception('رمز التحقق غير صالح أو منتهي');
+        }
+        $user->refresh(); 
+        $message ='تم تفعيل الحساب بنجاح';
+        return [
+            'data'    => [],
+            'message' => $message,
+            'code'    => 200
+        ];
+    }
+
+
+
+
+
 
 
     // public function login($request)

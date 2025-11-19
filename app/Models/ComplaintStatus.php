@@ -9,11 +9,12 @@ class ComplaintStatus extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'code', 'label', 'order_no'
+        'Status',
+        'ComplaintId'
     ];
 
-    public function complaints()
+    public function complaint()
     {
-        return $this->hasMany(Complaint::class, 'current_status_id');
+        return $this->belongsTo(Complaint::class, 'ComplaintId');
     }
 }

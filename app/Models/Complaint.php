@@ -9,38 +9,46 @@ class Complaint extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'reference_no', 'title', 'description', 'complaint_type',
-        'agency_id', 'reporter_id', 'current_status_id',
-        'location', 'closed_at'
+        'Title',
+        'Content',
+        'EmployeeId',
+        'UserId',
+        'AgencyId',
+        'SectionId'
     ];
 
-    public function reporter()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'reporter_id');
+        return $this->belongsTo(User::class, 'UserId');
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(User::class, 'EmployeeId');
     }
 
     public function agency()
     {
-        return $this->belongsTo(Agency::class);
+        return $this->belongsTo(GovernmentAgency::class, 'AgencyId');
     }
 
-    public function status()
+    public function section()
     {
-        return $this->belongsTo(ComplaintStatus::class, 'current_status_id');
+        return $this->belongsTo(GovernmentAgencySection::class, 'SectionId');
     }
 
-    public function history()
+    public function statuses()
     {
-        return $this->hasMany(ComplaintHistory::class);
+        return $this->hasMany(ComplaintStatus::class, 'ComplaintId');
     }
 
-    public function notifications()
+    public function responses()
     {
-        return $this->hasMany(Notification::class);
+        return $this->hasMany(ComplaintResponse::class, 'ComplaintId');
     }
 
-    public function attachments()
+    public function media()
     {
-        return $this->hasMany(Attachment::class);
+        return $this->hasMany(Media::class, 'ComplaintId');
     }
 }

@@ -13,16 +13,25 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email')->unique();
-            $table->string('phone')->nullable();
+            $table->string('FirstnameAr');
+            $table->string('FirstnameEn')->nullable();
+            $table->string('LastnameAr');
+            $table->string('LastnameEn')->nullable();
+            $table->string('MiddlenameAr')->nullable();
+            $table->string('MiddlenameEn')->nullable();
+            $table->string('BirthPlaceAr');
+            $table->string('BirthPlaceEn')->nullable();
+            $table->date('BirthDate');
+            $table->string('NationalNumber')->unique();
+            $table->string('IdFrontFace');
+            $table->string('IdBackFace');
+            $table->string('CurrentLocationAr');
+            $table->string('CurrentLocationEn');
+            $table->string('ContactNumber');
+            $table->string('Email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('agency_id')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->foreign('agency_id')->references('id')->on('agencies');
-            $table->rememberToken();
+
             $table->timestamps();
         });
     }

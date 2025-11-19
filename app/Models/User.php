@@ -19,14 +19,26 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
+
+        'FirstnameAr',
+        'FirstnameEn',
+        'LastnameAr',
+        'LastnameEn',
+        'MiddlenameAr',
+        'MiddlenameEn',
+        'BirthPlaceAr',
+        'BirthPlaceEn',
+        'BirthDate',
+        'NationalNumber',
+        'IdFrontFace',
+        'IdBackFace',
+        'CurrentLocationAr',
+        'CurrentLocationEn',
+        'ContactNumber',
+        'Email',
         'password',
-        'agency_id',
-        'is_active',
-        'fcm_token'
+        'email_verified_at',
+
     ];
 
     /**
@@ -47,33 +59,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    public function agency()
-    {
-        return $this->belongsTo(Agency::class);
-    }
 
     public function complaints()
     {
-        return $this->hasMany(Complaint::class, 'reporter_id');
+        return $this->hasMany(Complaint::class, 'UserId');
     }
 
-    public function complaintChanges()
+    public function responses()
     {
-        return $this->hasMany(ComplaintHistory::class, 'changed_by');
+        return $this->hasMany(ComplaintResponse::class, 'UserId');
     }
 
-    public function notifications()
+    public function employment()
     {
-        return $this->hasMany(Notification::class);
+        return $this->hasOne(GovernmentAgencyEmployee::class, 'UserId');
     }
 
-    public function attachments()
-    {
-        return $this->hasMany(Attachment::class, 'uploaded_by');
-    }
-
-    public function auditLogs()
-    {
-        return $this->hasMany(AuditLog::class, 'actor_id');
-    }
 }

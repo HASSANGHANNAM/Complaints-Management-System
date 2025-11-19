@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('complaint_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-            $table->string('label');
-            $table->integer('order_no');
+            $table->string('Status');
+            $table->foreignId('ComplaintId')->constrained('complaints');
             $table->timestamps();
         });
     }
