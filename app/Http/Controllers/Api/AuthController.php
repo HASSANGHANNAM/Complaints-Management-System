@@ -40,6 +40,16 @@ class AuthController extends Controller
             return Response::Error([], $message, 401);
         }
     }
+    public function getProfile(): JsonResponse
+    {
+        try {
+            $data = $this->authServices->getProfile();
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (Throwable $th) {
+            $message = $th->getMessage();
+            return Response::Error([], $message, 401);
+        }
+    }
     public function logout(): JsonResponse
     {
         try {
@@ -50,10 +60,10 @@ class AuthController extends Controller
             return Response::Error([], $message);
         }
     }
-        public function resendCode(Request $request)
+    public function resendCode(Request $request)
     {
         try {
-            $data = $this->authServices->resendCode($request->email);
+            $data = $this->authServices->resendCode($request->Email);
             return Response::success($data['data'], $data['message'], $data['code']);
         } catch (\Throwable $th) {
             return Response::Error([], $th->getMessage());

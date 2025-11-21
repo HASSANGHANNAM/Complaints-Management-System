@@ -16,7 +16,7 @@ class EnsureEmailIsVerified
     public function handle(Request $request, Closure $next)
     {
         if (!auth()->user()?->email_verified_at) {
-            return response()->json(['message' => 'يرجى تفعيل بريدك الإلكتروني'], 403);
+            return response()->json(['message' => 'Please verify your email'], 403);
         }
 
         return $next($request);

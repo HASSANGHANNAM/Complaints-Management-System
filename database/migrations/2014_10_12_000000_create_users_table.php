@@ -23,15 +23,15 @@ return new class extends Migration
             $table->string('BirthPlaceEn')->nullable();
             $table->date('BirthDate');
             $table->string('NationalNumber')->unique();
-            $table->string('IdFrontFace');
-            $table->string('IdBackFace');
+            $table->string('IdFrontFace')->nullable();
+            $table->string('IdBackFace')->nullable();
             $table->string('CurrentLocationAr');
-            $table->string('CurrentLocationEn');
+            $table->string('CurrentLocationEn')->nullable();
             $table->string('ContactNumber');
             $table->string('Email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-
+            $table->rememberToken();
             $table->timestamps();
         });
     }

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\EmailVerificationRepositoryInterface;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 
@@ -30,6 +31,14 @@ class AuthServices
     public function registerUser($request): array
     {
         return DB::transaction(function () use ($request) {
+            if (isset($request['IdFrontFace']) && $request['IdFrontFace']->isValid()) {
+                $idFrontPath = $this->storeIdFile($request['IdFrontFace'], 'front');
+                $request['IdFrontFace'] = $idFrontPath;
+            }
+            if (isset($request['IdBackFace']) && $request['IdBackFace']->isValid()) {
+                $idBackPath = $this->storeIdFile($request['IdBackFace'], 'back');
+                $request['IdBackFace'] = $idBackPath;
+            }
             $user = $this->userRepo->create($request);
             $this->userRepo->assignRole($user, 'user');
             $this->emailRepo->sendCode($user);
@@ -41,16 +50,22 @@ class AuthServices
     }
     public function login($request): array
     {
-        $user = $this->userRepo->findByEmail($request['email']);
-        if (!$user || !Hash::check($request['password'], $user->password)) {
+        $user = $this->userRepo->findByEmail($request['Email']);
+        if (!$user) {
             throw ValidationException::withMessages([
-                'email' => ['Invalid credentials'],
+                'Email' => ['Email is incorrect.'],
             ]);
         }
-         $user->refresh();
-         if (!$user->email_verified_at) {
-            throw new \Exception('يجب تفعيل البريد الإلكتروني قبل تسجيل الدخول');
+        if (!$user->email_verified_at) {
+            throw new \Exception('Email must be verified before logging in');
         }
+        if (!Hash::check($request['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'password' => ['password is incorrect.'],
+            ]);
+        }
+        $user->refresh();
+
 
         $data = $this->tokenService->createAuthTokens($user);
         $message = 'Login successful';
@@ -60,6 +75,13 @@ class AuthServices
             'message' => $message,
             'code' => $code
         ];
+    }
+    public function getProfile(): array
+    {
+        $data = $this->userRepo->getProfile(Auth::user());
+        $code = 200;
+        $message = 'User profil get successfully!';
+        return ['data' => $data, 'message' => $message, 'code' => $code];
     }
     public function logout($user): array
     {
@@ -85,9 +107,9 @@ class AuthServices
         ];
     }
 
-        public function resendCode($email): array
+    public function resendCode($Email): array
     {
-        $data = $this->emailRepo->resendCode($email);
+        $data = $this->emailRepo->resendCode($Email);
         $message = 'Resend successfully';
 
         return [
@@ -97,9 +119,9 @@ class AuthServices
         ];
     }
 
-        public function verifyCode($request): array
+    public function verifyCode($request): array
     {
-        $user = $this->userRepo->findByEmail($request['email']);
+        $user = $this->userRepo->findByEmail($request['Email']);
 
         if (!$user) {
             throw new \Exception('البريد الإلكتروني غير موجود');
@@ -110,14 +132,80 @@ class AuthServices
         if (!$ok) {
             throw new \Exception('رمز التحقق غير صالح أو منتهي');
         }
-        $user->refresh(); 
-        $message ='تم تفعيل الحساب بنجاح';
+        $user->refresh();
+        $message = 'تم تفعيل الحساب بنجاح';
         return [
             'data'    => [],
             'message' => $message,
             'code'    => 200
         ];
     }
+    private function storeIdFile($file, $type): string
+    {
+        $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+
+        $folder = 'users/id_cards/' . date('Y/m');
+        $fullPath = $folder . '/' . $type . '_' . $fileName;
+        Storage::disk('secure_documents')->put(
+            $fullPath,
+            file_get_contents($file->getRealPath())
+        );
+        return $fullPath;
+    }
+    // public function updateIdFiles($userId, array $fileData): void
+    // {
+    //     try {
+    //         $user = $this->user->findOrFail($userId);
+    //         $oldFiles = []; // لتخزين مسارات الملفات القديمة
+
+    //         // معالجة الوجه الأمامي
+    //         if (isset($fileData['IdFrontFace']) && $fileData['IdFrontFace']->isValid()) {
+    //             $oldFiles['front'] = $user->IdFrontFace;
+    //             $user->IdFrontFace = $this->storeIdFile($fileData['IdFrontFace'], 'front');
+    //         }
+
+    //         // معالجة الوجه الخلفي
+    //         if (isset($fileData['IdBackFace']) && $fileData['IdBackFace']->isValid()) {
+    //             $oldFiles['back'] = $user->IdBackFace;
+    //             $user->IdBackFace = $this->storeIdFile($fileData['IdBackFace'], 'back');
+    //         }
+
+    //         // حفظ التغييرات في الداتابيز
+    //         $user->save();
+
+    //         // حذف الملفات القديم بعد التأكد من حفظ الجديد
+    //         $this->deleteOldFiles($oldFiles);
+    //     } catch (\Exception $e) {
+    //         // في حالة خطأ، حذف الملفات الجديدة التي تم رفعها
+    //         $this->rollbackNewFiles($user, $fileData);
+    //         throw new \Exception("فشل في تحديث ملفات الهوية: " . $e->getMessage());
+    //     }
+    // }
+
+    // private function deleteOldFiles(array $oldFiles): void
+    // {
+    //     foreach ($oldFiles as $oldPath) {
+    //         if ($oldPath && Storage::disk('secure_documents')->exists($oldPath)) {
+    //             Storage::disk('secure_documents')->delete($oldPath);
+    //         }
+    //     }
+    // }
+
+    // private function rollbackNewFiles(User $user, array $fileData): void
+    // {
+    //     // حذف الملفات الجديدة في حالة فشل العملية
+    //     if (isset($fileData['IdFrontFace']) && $user->IdFrontFace) {
+    //         Storage::disk('secure_documents')->delete($user->IdFrontFace);
+    //     }
+    //     if (isset($fileData['IdBackFace']) && $user->IdBackFace) {
+    //         Storage::disk('secure_documents')->delete($user->IdBackFace);
+    //     }
+    // }
+    // public function getIdFilePath($userId, $type)
+    // {
+    //     $user = $this->user->findOrFail($userId);
+    //     return $type === 'front' ? $user->IdFrontFace : $user->IdBackFace;
+    // }
 
 
 
