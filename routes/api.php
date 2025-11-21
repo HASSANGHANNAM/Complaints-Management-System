@@ -26,7 +26,7 @@ Route::post('/verify', [AuthController::class, 'verifyCode']);
 
 Route::post('/login', [AuthController::class, 'login']);
 
-
+// ->middleware([ 'permission:view posts']);
 
 Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -53,7 +53,7 @@ Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
         return response($fileContent)
             ->header('Content-Type', $mimeType)
             ->header('Content-Disposition', 'inline; filename="id-front.' . $extension . '"');
-    });
+    })->middleware(['permission:view posts']);;
     Route::get('/users/{id}/id-back', function ($id) {
         $user = User::findOrFail($id);
         if (!$user->IdBackFace) {
