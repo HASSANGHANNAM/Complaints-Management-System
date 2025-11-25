@@ -19,10 +19,19 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        // $this->call(adminSeeder::class);
         $this->call([
             RolesAndPermissionsSeeder::class,
-
+            AdminSeeder::class,
+            UsersSeeder::class,
+            GovernmentAgencyEmploymentTypesSeeder::class,
+            GovernmentAgenciesSeeder::class,
+            GovernmentAgencySectionsSeeder::class,
+            GovernmentAgencySectionServicesSeeder::class,
+            GovernmentAgencyEmployeesSeeder::class,
+            ComplaintsSeeder::class,
+            ComplaintStatusesSeeder::class,
+            ComplaintResponsesSeeder::class,
+            MediaSeeder::class,
         ]);
     }
 }

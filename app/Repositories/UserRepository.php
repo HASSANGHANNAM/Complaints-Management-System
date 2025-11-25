@@ -5,10 +5,7 @@ namespace App\Repositories;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\Contracts\UserRepositoryInterface;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Str;
+use Ramsey\Collection\Collection;
 
 class UserRepository implements UserRepositoryInterface
 
@@ -34,10 +31,14 @@ class UserRepository implements UserRepositoryInterface
             'CurrentLocationEn' => $data['CurrentLocationEn'] ?? null,
             'ContactNumber' => $data['ContactNumber'],
             'Email' => $data['Email'],
-            'password' => Hash::make($data['password'])
+            'password' => Hash::make($data['password']),
+            'email_verified_at' => $data['email_verified_at'] ?? null
         ]);
     }
-
+    public function all(): Collection
+    {
+        throw new \Exception('Not implemented');
+    }
     public function findByEmail(string $Email): ?User
     {
         return $this->user->where('Email', $Email)->first();
@@ -57,26 +58,27 @@ class UserRepository implements UserRepositoryInterface
     {
         return $user->update($data);
     }
+
     public function getProfile(User $user): array
     {
         return [
             'id' => $user->id,
-            'first_name_ar' => $user->FirstnameAr,
-            'first_name_en' => $user->FirstnameEn,
-            'middle_name_ar' => $user->MiddlenameAr,
-            'middle_name_en' => $user->MiddlenameEn,
-            'last_name_ar' => $user->LastnameAr,
-            'last_name_en' => $user->LastnameEn,
-            'birth_place_ar' => $user->BirthPlaceAr,
-            'birth_place_en' => $user->BirthPlaceEn,
-            'birth_date' => $user->BirthDate,
-            'national_number' => $user->NationalNumber,
-            'current_location_ar' => $user->CurrentLocationAr,
-            'current_location_en' => $user->CurrentLocationEn,
-            'contact_number' => $user->ContactNumber,
-            'email' => $user->Email,
-            'id_front_url' => $user->IdFrontFace ? url("/api/users/{$user->id}/id-front") : null,
-            'id_back_url' => $user->IdBackFace ? url("/api/users/{$user->id}/id-back") : null,
+            'FirstnameAr' => $user->FirstnameAr,
+            'FirstnameEn' => $user->FirstnameEn,
+            'MiddlenameAr' => $user->MiddlenameAr,
+            'MiddlenameEn' => $user->MiddlenameEn,
+            'LastnameAr' => $user->LastnameAr,
+            'LastnameEn' => $user->LastnameEn,
+            'BirthPlaceAr' => $user->BirthPlaceAr,
+            'BirthPlaceEn' => $user->BirthPlaceEn,
+            'BirthDate' => $user->BirthDate,
+            'NationalNumber' => $user->NationalNumber,
+            'NationalNumber' => $user->NationalNumber,
+            'CurrentLocationEn' => $user->CurrentLocationEn,
+            'ContactNumber' => $user->ContactNumber,
+            'Email' => $user->Email,
+            'IdFrontFace' => $user->IdFrontFace ? url("/api/users/{$user->id}/id-front") : null,
+            'IdBackFace' => $user->IdBackFace ? url("/api/users/{$user->id}/id-back") : null,
         ];
     }
 }
