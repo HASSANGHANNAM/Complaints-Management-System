@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Complaints;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateComplaintRequest extends FormRequest
+class MyComplaintsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,10 @@ class CreateComplaintRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'Title'       => 'required|string|max:255',
-            'Content'     => 'required|string',
-            'AgencyId'    => 'required|exists:agencies,id',
-            'SectionId'   => 'required|exists:agency_sections,id',
-            'media'       => 'sometimes|array',
-            'media.*'     => 'file|mimes:jpg,jpeg,png,mp4,pdf|max:20480',
+            'Title'     => 'nullable|string|max:255',
+            'Status'    => 'nullable|string',
+            'AgencyId'  => 'nullable|integer',
+            'SectionId' => 'nullable|integer',
         ];
     }
 }

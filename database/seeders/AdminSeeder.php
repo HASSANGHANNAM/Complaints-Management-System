@@ -36,7 +36,7 @@ class AdminSeeder extends Seeder
             'CurrentLocationEn' => 'Damascus',
             'ContactNumber' => '+963123456789',
             'Email' => 'admin@gmail.com',
-            'password' => Hash::make('admin123'),
+            'password' => 'admin123',
             'email_verified_at' => now(),
         ];
         DB::transaction(function () use ($admin) {

@@ -6,7 +6,6 @@ use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class UsersSeeder extends Seeder
 {
@@ -38,7 +37,7 @@ class UsersSeeder extends Seeder
                 'CurrentLocationEn' => 'Alnabek',
                 'ContactNumber' => '+963934519102',
                 'Email' => 'hassan@gmail.com',
-                'password' => Hash::make('hassan123'),
+                'password' => 'hassan123',
                 'email_verified_at' => now(),
             ],
             [
@@ -58,7 +57,7 @@ class UsersSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus',
                 'ContactNumber' => '+963954563434',
                 'Email' => 'ghaith@gmail.com',
-                'password' => Hash::make('ghaith123'),
+                'password' => 'ghaith123',
                 'email_verified_at' => now(),
             ]
         ];

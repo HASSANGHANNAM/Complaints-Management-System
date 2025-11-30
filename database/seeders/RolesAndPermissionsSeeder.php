@@ -15,15 +15,24 @@ class RolesAndPermissionsSeeder extends Seeder
         $employeeRole = Role::create(['name' => 'employee']);
         $agencyManagerRole = Role::create(['name' => 'agencyManager']);
         $permissions = [
-            'view posts',
-            'publish posts'
+            'create complaints',
+            'get agencies',
+            'get agency sections',
+            'get my complaints',
+            'get complaint details'
         ];
         foreach ($permissions as $permissionsname) {
             Permission::findOrCreate($permissionsname);
         }
 
-        $adminRole->givePermissionTo(Permission::all());
-        $userRole->givePermissionTo([]);
+        $adminRole->givePermissionTo([]);
+        $userRole->givePermissionTo([
+            'create complaints',
+            'get agencies',
+            'get agency sections',
+            'get my complaints',
+            'get complaint details'
+        ]);
         $employeeRole->givePermissionTo([]);
         $agencyManagerRole->givePermissionTo([]);
 

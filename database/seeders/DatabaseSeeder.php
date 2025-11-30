@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             AdminSeeder::class,
             UsersSeeder::class,
-            GovernmentAgencyEmploymentTypesSeeder::class,
             GovernmentAgenciesSeeder::class,
             GovernmentAgencySectionsSeeder::class,
             GovernmentAgencySectionServicesSeeder::class,

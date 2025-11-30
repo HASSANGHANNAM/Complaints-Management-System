@@ -20,31 +20,31 @@ class ComplaintStatusesSeeder extends Seeder
     {
         $complaint_statuses = [
             [
-                'Status' => 'مستلمة',
+                'Status' => 'جديدة',
                 'ComplaintId' => 1,
             ],
             [
-                'Status' => 'قيد المراجعة',
+                'Status' => 'جديدة',
                 'ComplaintId' => 1,
             ],
             [
-                'Status' => 'مستلمة',
+                'Status' => 'جديدة',
                 'ComplaintId' => 2,
             ],
             [
-                'Status' => 'مستلمة',
+                'Status' => 'جديدة',
                 'ComplaintId' => 3,
             ],
             [
-                'Status' => 'قيد المراجعة',
+                'Status' => 'جديدة',
                 'ComplaintId' => 3,
             ],
             [
-                'Status' => 'تم الحل',
+                'Status' => 'جديدة',
                 'ComplaintId' => 3,
             ],
             [
-                'Status' => 'مستلمة',
+                'Status' => 'جديدة',
                 'ComplaintId' => 4,
             ],
         ];
@@ -56,4 +56,3 @@ class ComplaintStatusesSeeder extends Seeder
         });
     }
 }
-

@@ -39,7 +39,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Umayyad Square',
                 'ContactNumber' => '+963995123456',
                 'Email' => 'khaled.interior@gov.sy',
-                'password' => Hash::make('employee123'),
+                'password' => 'emploee123',
                 'email_verified_at' => now(),
             ],
             [
@@ -59,7 +59,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Umayyad Square',
                 'ContactNumber' => '+963996234567',
                 'Email' => 'nour.interior@gov.sy',
-                'password' => Hash::make('employee123'),
+                'password' => 'emploee123',
                 'email_verified_at' => now(),
             ],
             [
@@ -79,7 +79,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Mazzeh',
                 'ContactNumber' => '+963997345678',
                 'Email' => 'layla.education@gov.sy',
-                'password' => Hash::make('employee123'),
+                'password' => 'emploee123',
                 'email_verified_at' => now(),
             ],
             [
@@ -99,7 +99,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Mazzeh',
                 'ContactNumber' => '+963998456789',
                 'Email' => 'omar.education@gov.sy',
-                'password' => Hash::make('employee123'),
+                'password' => 'emploee123',
                 'email_verified_at' => now(),
             ],
             [
@@ -119,7 +119,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Malki',
                 'ContactNumber' => '+963999567890',
                 'Email' => 'rania.health@gov.sy',
-                'password' => Hash::make('employee123'),
+                'password' => 'emploee123',
                 'email_verified_at' => now(),
             ],
             [
@@ -139,7 +139,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Malki',
                 'ContactNumber' => '+963990678901',
                 'Email' => 'youssef.health@gov.sy',
-                'password' => Hash::make('employee123'),
+                'password' => 'emploee123',
                 'email_verified_at' => now(),
             ],
             [
@@ -159,7 +159,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Bab Touma',
                 'ContactNumber' => '+963991789012',
                 'Email' => 'mariam.passport@gov.sy',
-                'password' => Hash::make('employee123'),
+                'password' => 'emploee123',
                 'email_verified_at' => now(),
             ],
             [
@@ -179,7 +179,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Bab Touma',
                 'ContactNumber' => '+963992890123',
                 'Email' => 'hussam.passport@gov.sy',
-                'password' => Hash::make('employee123'),
+                'password' => 'emploee123',
                 'email_verified_at' => now(),
             ],
         ];
@@ -199,7 +199,6 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => true,
                     'UserId' => $employeeIds[0],
-                    'EmploymentTypeId' => 1,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -207,7 +206,6 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => false,
                     'UserId' => $employeeIds[1],
-                    'EmploymentTypeId' => 1,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -215,7 +213,6 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => true,
                     'UserId' => $employeeIds[2],
-                    'EmploymentTypeId' => 1,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -223,7 +220,6 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => false,
                     'UserId' => $employeeIds[3],
-                    'EmploymentTypeId' => 1,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -231,7 +227,6 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => true,
                     'UserId' => $employeeIds[4],
-                    'EmploymentTypeId' => 1,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -239,7 +234,6 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => false,
                     'UserId' => $employeeIds[5],
-                    'EmploymentTypeId' => 1,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -247,7 +241,6 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => true,
                     'UserId' => $employeeIds[6],
-                    'EmploymentTypeId' => 1,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -255,7 +248,6 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => false,
                     'UserId' => $employeeIds[7],
-                    'EmploymentTypeId' => 1,
                 ],
             ];
 

@@ -39,7 +39,7 @@ class GovernmentAgenciesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Umayyad Square',
                 'ContactNumber' => '+963991234567',
                 'Email' => 'ahmed.interior@gov.sy',
-                'password' => Hash::make('manager123'),
+                'password' => 'manager123',
                 'email_verified_at' => now(),
             ],
             [
@@ -59,7 +59,7 @@ class GovernmentAgenciesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Mazzeh',
                 'ContactNumber' => '+963992345678',
                 'Email' => 'fatima.education@gov.sy',
-                'password' => Hash::make('manager123'),
+                'password' => 'manager123',
                 'email_verified_at' => now(),
             ],
             [
@@ -79,7 +79,7 @@ class GovernmentAgenciesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Malki',
                 'ContactNumber' => '+963993456789',
                 'Email' => 'mohammed.health@gov.sy',
-                'password' => Hash::make('manager123'),
+                'password' => 'manager123',
                 'email_verified_at' => now(),
             ],
             [
@@ -99,7 +99,7 @@ class GovernmentAgenciesSeeder extends Seeder
                 'CurrentLocationEn' => 'Damascus - Bab Touma',
                 'ContactNumber' => '+963994567890',
                 'Email' => 'sara.passport@gov.sy',
-                'password' => Hash::make('manager123'),
+                'password' => 'manager123',
                 'email_verified_at' => now(),
             ],
         ];

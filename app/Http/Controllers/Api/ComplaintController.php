@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Complaints\CreateComplaintRequest;
 use App\Http\Requests\Complaints\AddAttachmentRequest;
+use App\Http\Requests\MyComplaintsRequest;
+
 use App\Services\ComplaintService;
 use App\Http\Responses\Response;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
 class ComplaintController extends Controller
@@ -22,7 +25,9 @@ class ComplaintController extends Controller
     public function createComplaint(CreateComplaintRequest $request): JsonResponse
     {
         try {
-            $data = $this->complaintService->createComplaint($request->validated());
+            $validated = $request->validated();
+            $validated['media'] = $request->file('media') ?? [];
+            $data = $this->complaintService->createComplaint($validated);
             return Response::success($data['data'], $data['message'], $data['code']);
         } catch (Throwable $th) {
             return Response::Error([], $th->getMessage());
@@ -39,10 +44,19 @@ class ComplaintController extends Controller
         }
     }
 
-    public function myComplaints(): JsonResponse
+    public function myComplaints(MyComplaintsRequest $request): JsonResponse
     {
         try {
-            $data = $this->complaintService->getUserComplaints(auth()->id());
+            $data = $this->complaintService->getUserComplaints($request->validated());
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (Throwable $th) {
+            return Response::Error([], $th->getMessage());
+        }
+    }
+    public function getComplaintDetails($id): JsonResponse
+    {
+        try {
+            $data = $this->complaintService->getComplaintDetails($id);
             return Response::success($data['data'], $data['message'], $data['code']);
         } catch (Throwable $th) {
             return Response::Error([], $th->getMessage());

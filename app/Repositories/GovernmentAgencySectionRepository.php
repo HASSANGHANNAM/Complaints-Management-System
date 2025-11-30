@@ -26,6 +26,37 @@ class GovernmentAgencySectionRepository implements GovernmentAgencySectionReposi
         ]);
     }
 
+    public function allByAgency($request = [], int $agencyId): array
+    {
+        $query = GovernmentAgencySection::where('AgencyId', $agencyId);
+
+        if ($request['lang'] === "Ar") {
+            $query->select([
+                'id',
+                'NameAr',
+                'DescriptionAr',
+                'AgencyId',
+            ]);
+
+            if (isset($request['NameAr']) && !empty($request['NameAr'])) {
+                $query->where('NameAr', 'like', '%' . $request['NameAr'] . '%');
+            }
+        } else {
+            $query->select([
+                'id',
+                'NameEn',
+                'DescriptionEn',
+                'AgencyId',
+            ]);
+
+            if (isset($request['NameEn']) && !empty($request['NameEn'])) {
+                $query->where('NameEn', 'like', '%' . $request['NameEn'] . '%');
+            }
+        }
+
+        return $query->get()->toArray();
+    }
+
     public function update(GovernmentAgencySection $section, array $data): bool
     {
         return $section->update($data);
@@ -45,4 +76,3 @@ class GovernmentAgencySectionRepository implements GovernmentAgencySectionReposi
         return $this->section->find($id);
     }
 }
-

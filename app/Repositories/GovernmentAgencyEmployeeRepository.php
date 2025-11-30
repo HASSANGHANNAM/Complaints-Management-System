@@ -22,8 +22,7 @@ class GovernmentAgencyEmployeeRepository implements GovernmentAgencyEmployeeRepo
             'EmploymentDate' => $data['EmploymentDate'] ?? null,
             'CanResponseToComplaint' => $data['CanResponseToComplaint'] ?? false,
             'CanChangeComplaintStatus' => $data['CanChangeComplaintStatus'] ?? false,
-            'UserId' => $data['UserId'],
-            'EmploymentTypeId' => $data['EmploymentTypeId'] ?? null,
+            'UserId' => $data['UserId']
         ]);
     }
 
