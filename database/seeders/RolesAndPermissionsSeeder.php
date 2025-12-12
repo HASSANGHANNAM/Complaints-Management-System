@@ -19,7 +19,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'get agencies',
             'get agency sections',
             'get my complaints',
-            'get complaint details'
+            'get complaint details',
+            'agencyManager',
+            'employee'
         ];
         foreach ($permissions as $permissionsname) {
             Permission::findOrCreate($permissionsname);
