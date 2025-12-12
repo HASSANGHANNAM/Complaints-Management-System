@@ -14,8 +14,42 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $adminRole = Role::create(['name' => 'admin']);
         $userRole = Role::create(['name' => 'user']);
+<<<<<<< Updated upstream
 
         $adminRole->givePermissionTo(Permission::all());
         $userRole->givePermissionTo(Permission::all());
+=======
+        $employeeRole = Role::create(['name' => 'employee']);
+        $agencyManagerRole = Role::create(['name' => 'agencyManager']);
+        $permissions = [
+            'create complaints',
+            'get agencies',
+            'get agency sections',
+            'get my complaints',
+            'get complaint details',
+            'agencyManager',
+            'employee'
+        ];
+        foreach ($permissions as $permissionsname) {
+            Permission::findOrCreate($permissionsname);
+        }
+
+        $adminRole->givePermissionTo([]);
+        $userRole->givePermissionTo([
+            'create complaints',
+            'get agencies',
+            'get agency sections',
+            'get my complaints',
+            'get complaint details'
+        ]);
+        $employeeRole->givePermissionTo([]);
+        $agencyManagerRole->givePermissionTo([]);
+
+        $agencyManagerRole->givePermissionTo('agencyManager');
+
+        // $admin->assignRole($adminRole);
+        // $permissions = $admin->permissions()->pluck('name')->toArray();
+        // $admin->givePermissionTo($permissions);
+>>>>>>> Stashed changes
     }
 }

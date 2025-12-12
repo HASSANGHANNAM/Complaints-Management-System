@@ -2,17 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use App\Models\EmailVerification;
-use Carbon\Carbon;
 use Illuminate\Support\Str;
-use App\Services\NotificationService;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Auth\Events\Registered;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\EmailVerificationRepositoryInterface;
 use Illuminate\Validation\ValidationException;
@@ -118,6 +111,7 @@ class AuthServices
             'code'    => 200
         ];
     }
+<<<<<<< Updated upstream
 
 
 
@@ -223,5 +217,72 @@ class AuthServices
     //     } else {
     //         return ['data' => $data, 'message' => 'Unauthorized access!'];
     //     }
+=======
+    private function storeIdFile($file, $type): string
+    {
+        $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+
+        $folder = 'users/id_cards/' . date('Y/m');
+        $fullPath = $folder . '/' . $type . '_' . $fileName;
+        Storage::disk('secure_documents')->put(
+            $fullPath,
+            file_get_contents($file->getRealPath())
+        );
+        return $fullPath;
+    }
+    // public function updateIdFiles($userId, array $fileData): void
+    // {
+    //     try {
+    //         $user = $this->user->findOrFail($userId);
+    //         $oldFiles = []; // لتخزين مسارات الملفات القديمة
+
+    //         // معالجة الوجه الأمامي
+    //         if (isset($fileData['IdFrontFace']) && $fileData['IdFrontFace']->isValid()) {
+    //             $oldFiles['front'] = $user->IdFrontFace;
+    //             $user->IdFrontFace = $this->storeIdFile($fileData['IdFrontFace'], 'front');
+    //         }
+
+    //         // معالجة الوجه الخلفي
+    //         if (isset($fileData['IdBackFace']) && $fileData['IdBackFace']->isValid()) {
+    //             $oldFiles['back'] = $user->IdBackFace;
+    //             $user->IdBackFace = $this->storeIdFile($fileData['IdBackFace'], 'back');
+    //         }
+
+    //         // حفظ التغييرات في الداتابيز
+    //         $user->save();
+
+    //         // حذف الملفات القديم بعد التأكد من حفظ الجديد
+    //         $this->deleteOldFiles($oldFiles);
+    //     } catch (\Exception $e) {
+    //         // في حالة خطأ، حذف الملفات الجديدة التي تم رفعها
+    //         $this->rollbackNewFiles($user, $fileData);
+    //         throw new \Exception("فشل في تحديث ملفات الهوية: " . $e->getMessage());
+    //     }
+    // }
+
+    // private function deleteOldFiles(array $oldFiles): void
+    // {
+    //     foreach ($oldFiles as $oldPath) {
+    //         if ($oldPath && Storage::disk('secure_documents')->exists($oldPath)) {
+    //             Storage::disk('secure_documents')->delete($oldPath);
+    //         }
+    //     }
+    // }
+
+    // private function rollbackNewFiles(User $user, array $fileData): void
+    // {
+    //     // حذف الملفات الجديدة في حالة فشل العملية
+    //     if (isset($fileData['IdFrontFace']) && $user->IdFrontFace) {
+    //         Storage::disk('secure_documents')->delete($user->IdFrontFace);
+    //     }
+    //     if (isset($fileData['IdBackFace']) && $user->IdBackFace) {
+    //         Storage::disk('secure_documents')->delete($user->IdBackFace);
+    //     }
+    // }
+    // public function getIdFilePath($userId, $type)
+    // {
+    //     $user = $this->user->findOrFail($userId);
+    //     return $type === 'front' ? $user->IdFrontFace : $user->IdBackFace;
+>>>>>>> Stashed changes
     // }
 }

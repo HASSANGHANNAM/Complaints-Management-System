@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Complaints;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateComplaintRequest extends FormRequest
+class GetAgenciesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,16 @@ class CreateComplaintRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'Title'       => 'required|string|max:255',
-            'Content'     => 'required|string',
-            'AgencyId'    => 'required|exists:agencies,id',
-            'SectionId'   => 'required|exists:agency_sections,id',
-            'media'       => 'sometimes|array',
-            'media.*'     => 'file|mimes:jpg,jpeg,png,mp4,pdf|max:20480',
+            'NameAr' => 'nullable|string|max:255',
+            'NameEn' => 'nullable|string|max:255',
+            'lang'   => 'required|string|in:Ar,En',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'lang' => $this->header('Accept-Language', 'En'),
+        ]);
     }
 }
