@@ -39,4 +39,19 @@ Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
     Route::get('/getComplaintDetails/{id}', [ComplaintController::class, 'getComplaintDetails']);
     Route::get('/getAgencies', [GovernmentAgencyController::class, 'getAgencies'])->middleware(['permission:get agencies']);
     Route::get('/getAgency/{id}/sections', [GovernmentAgencyController::class, 'getSections'])->middleware(['permission:get agency sections']);
+
+    Route::prefix('agencies')->group(function () {
+        Route::get('/search', [GovernmentAgencyController::class, 'search']);
+        //! POST route for creating agency
+        Route::post('/', [GovernmentAgencyController::class, 'store']);
+        //! Routes for agency by Id
+        Route::prefix('{id}')->group(function () {
+            //! GET single agency
+            Route::get('/', [GovernmentAgencyController::class, 'show']);
+            //! PUT/PATCH for updating agency
+            Route::put('/', [GovernmentAgencyController::class, 'update']);
+            Route::patch('/', [GovernmentAgencyController::class, 'update']);
+            Route::delete('/', [GovernmentAgencyController::class, 'destroy']);
+        });
+    });
 });

@@ -52,7 +52,7 @@ class AuthServices
         if (!$user->email_verified_at) {
             throw new \Exception('Email must be verified before logging in');
         }
-        if (!Hash::check($request['password'], $user->password)) {
+        if (!Hash::check($request['password'],$user->password)) {
             throw ValidationException::withMessages([
                 'password' => ['password is incorrect.'],
             ]);

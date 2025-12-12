@@ -14,10 +14,10 @@ class FileStorageService
         $user = User::findOrFail($id);
         if ($face == "id-front") {
             if (!$user->IdFrontFace) {
-                return response()->json(['error' => 'صورة الهوية الأمامية غير موجودة'], 404);
+                return response()->json(['message' => 'صورة الهوية الأمامية غير موجودة'], 404);
             }
             if (!Storage::disk('secure_documents')->exists($user->IdFrontFace)) {
-                return response()->json(['error' => 'ملف الصورة غير موجود في التخزين'], 404);
+                return response()->json(['message' => $user->IdFrontFace], 404);
             }
             $fileContent = Storage::disk('secure_documents')->get($user->IdFrontFace);
             $extension = pathinfo($user->IdFrontFace, PATHINFO_EXTENSION);
@@ -36,10 +36,10 @@ class FileStorageService
                 ->header('Content-Disposition', 'inline; filename="id-front.' . $extension . '"');
         } else if ($face == "id-back") {
             if (!$user->IdBackFace) {
-                return response()->json(['error' => 'صورة الهوية الخلفية غير موجودة'], 404);
+                return response()->json(['message' => 'صورة الهوية الخلفية غير موجودة'], 404);
             }
             if (!Storage::disk('secure_documents')->exists($user->IdBackFace)) {
-                return response()->json(['error' => 'ملف الصورة غير موجود في التخزين'], 404);
+                return response()->json(['message' => 'ملف الصورة غير موجود في التخزين'], 404);
             }
             $fileContent = Storage::disk('secure_documents')->get($user->IdBackFace);
             $extension = pathinfo($user->IdBackFace, PATHINFO_EXTENSION);
