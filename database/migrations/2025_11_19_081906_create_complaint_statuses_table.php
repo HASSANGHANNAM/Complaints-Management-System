@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('complaint_statuses', function (Blueprint $table) {
             $table->id();
-            $table->enum('Status', ['بانتظار الرد', 'جديدة', 'قيد المعالجة', 'مرفوضة', 'منجزة'])->default('جديدة');
+            $table->enum('Status', ['بانتظار الرد من المواطن', 'جديدة', 'قيد المعالجة', 'مرفوضة', 'منجزة', 'تم الرد من قبل المواطن'])->default('جديدة');
             $table->foreignId('ComplaintId')->constrained('complaints');
             $table->timestamps();
         });

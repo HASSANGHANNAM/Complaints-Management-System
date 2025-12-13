@@ -12,5 +12,5 @@ interface ComplaintResponseRepositoryInterface
     public function update(ComplaintResponse $complaintResponse, array $data): bool;
     public function delete(int $id): bool;
     public function findById(int $id): ?ComplaintResponse;
+    public function getResponsesByComplaintId(int $id): array;
 }
-

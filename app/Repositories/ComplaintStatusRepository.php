@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\ComplaintStatus;
 use App\Repositories\Contracts\ComplaintStatusRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Collection\Collection;
 
 class ComplaintStatusRepository implements ComplaintStatusRepositoryInterface
@@ -41,5 +42,13 @@ class ComplaintStatusRepository implements ComplaintStatusRepositoryInterface
     {
         return $this->complaintStatus->find($id);
     }
-}
 
+    public function getTracing(int $id): array
+    {
+        return  DB::table('complaint_statuses')
+            ->select('id', 'Status', 'created_at')
+            ->where('ComplaintId', $id)
+            ->orderBy('created_at', 'desc')
+            ->get()->toArray();
+    }
+}

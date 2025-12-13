@@ -43,30 +43,34 @@ Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
     Route::get('/getComplaintDetails/{id}', [ComplaintController::class, 'getComplaintDetails']);
     Route::get('/getAgencies', [GovernmentAgencyController::class, 'getAgencies'])->middleware(['permission:get agencies']);
     Route::get('/getAgency/{id}/sections', [GovernmentAgencyController::class, 'getSections'])->middleware(['permission:get agency sections']);
+    Route::get('/getComplaintRespons/{id}', [ComplaintController::class, 'getComplaintRespons'])->middleware(['permission:get complaint respons']);
+    Route::post('/createComplaintRespons', [ComplaintController::class, 'createComplaintRespons'])->middleware(['permission:create complaint respons']);
+    Route::post('/createRespons', [ComplaintController::class, 'createRespons'])->middleware(['permission:create respons']);
+    Route::get('/getTracing/{id}', [ComplaintController::class, 'getTracing'])->middleware(['permission:get Tracing']);
 
     Route::middleware(['permission:agencyManager'])->group(function () {
 
-    Route::post('/createEmployee', [GovernmentAgencyEmployeeController::class, 'createEmployee']);
-    Route::put('/updateEmployee/{id}', [GovernmentAgencyEmployeeController::class, 'updateEmployee']);
-    Route::delete('/deleteEmployee/{id}', [GovernmentAgencyEmployeeController::class, 'deleteEmployee']);
-    Route::get('/getEmployee/{id}', [GovernmentAgencyEmployeeController::class, 'getEmployee']);
-    Route::get('/employees', [GovernmentAgencyEmployeeController::class, 'listEmployees']);
+        Route::post('/createEmployee', [GovernmentAgencyEmployeeController::class, 'createEmployee']);
+        Route::put('/updateEmployee/{id}', [GovernmentAgencyEmployeeController::class, 'updateEmployee']);
+        Route::delete('/deleteEmployee/{id}', [GovernmentAgencyEmployeeController::class, 'deleteEmployee']);
+        Route::get('/getEmployee/{id}', [GovernmentAgencyEmployeeController::class, 'getEmployee']);
+        Route::get('/employees', [GovernmentAgencyEmployeeController::class, 'listEmployees']);
 
-    Route::post('/create-services/{id}', [GovernmentAgencySectionServiceController::class, 'create']);
-    Route::put('/update-services/{id}', [GovernmentAgencySectionServiceController::class, 'update']);
-    Route::delete('/delete-services/{id}', [GovernmentAgencySectionServiceController::class, 'delete']);
-    Route::get('/find-services/{id}', [GovernmentAgencySectionServiceController::class, 'find']);
-    // Route::get('/list-services', [GovernmentAgencySectionServiceController::class, 'list']);
+        Route::post('/create-services/{id}', [GovernmentAgencySectionServiceController::class, 'create']);
+        Route::put('/update-services/{id}', [GovernmentAgencySectionServiceController::class, 'update']);
+        Route::delete('/delete-services/{id}', [GovernmentAgencySectionServiceController::class, 'delete']);
+        Route::get('/find-services/{id}', [GovernmentAgencySectionServiceController::class, 'find']);
+        // Route::get('/list-services', [GovernmentAgencySectionServiceController::class, 'list']);
 
-    Route::post('/createSection', [GovernmentAgencySectionController::class, 'create']);
-    Route::put('/updateSection/{id}', [GovernmentAgencySectionController::class, 'update']);
-    Route::delete('/deleteSection/{id}', [GovernmentAgencySectionController::class, 'delete']);
-    Route::get('/findSection/{id}', [GovernmentAgencySectionController::class, 'get']);
-    Route::get('/listSection', [GovernmentAgencySectionController::class, 'list']);
-});
+        Route::post('/createSection', [GovernmentAgencySectionController::class, 'create']);
+        Route::put('/updateSection/{id}', [GovernmentAgencySectionController::class, 'update']);
+        Route::delete('/deleteSection/{id}', [GovernmentAgencySectionController::class, 'delete']);
+        Route::get('/findSection/{id}', [GovernmentAgencySectionController::class, 'get']);
+        Route::get('/listSection', [GovernmentAgencySectionController::class, 'list']);
+    });
 
     // Route::middleware(['permission:employee'])->group(function () {
-        Route::post('/updateComplaintsStatus/{complaintId}', [ComplaintStatusController::class, 'updateStatus']);
+    Route::post('/updateComplaintsStatus/{complaintId}', [ComplaintStatusController::class, 'updateStatus']);
     // });
 
     Route::prefix('agencies')->group(function () {

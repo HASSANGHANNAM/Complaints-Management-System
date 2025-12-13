@@ -3,19 +3,22 @@
 namespace App\Services;
 
 use App\Repositories\Contracts\ComplaintRepositoryInterface;
+use App\Repositories\Contracts\ComplaintResponseRepositoryInterface;
 use App\Repositories\Contracts\ComplaintStatusRepositoryInterface;
 use App\Repositories\Contracts\MediaRepositoryInterface;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 
 class ComplaintService
 {
     public function __construct(
         private ComplaintRepositoryInterface $complaintRepo,
         private ComplaintStatusRepositoryInterface $complaintStatusRepo,
-        private MediaRepositoryInterface $mediaRepo
+        private MediaRepositoryInterface $mediaRepo,
+        private ComplaintResponseRepositoryInterface $complaintResponseRepo
     ) {}
 
     public function createComplaint($request)
@@ -91,5 +94,54 @@ class ComplaintService
     public function getComplaintTracking($complaintId)
     {
         //  جلب التحديثات والحالة الزمنية للشكوى
+    }
+
+    public function getComplaintRespons($id)
+    {
+        $data = $this->complaintResponseRepo->getResponsesByComplaintId($id);
+        $code = 200;
+        $message = 'User Complaint details retrieved successfully!';
+        return ['data' => $data, 'message' => $message, 'code' => $code];
+    }
+    public function createComplaintRespons($request)
+    {
+        return DB::transaction(function () use ($request) {
+            if (!Arr::has($request, 'ComplaintId')) {
+                if ($request['ParentId'] !== null) {
+                    $parentResponse = $this->complaintResponseRepo->findById($request['ParentId']);
+                    $request['ComplaintId'] = $parentResponse ? $parentResponse->ComplaintId : null;
+                }
+            }
+            $this->complaintResponseRepo->create($request);
+            $files = $request['media'] ?? null;
+            if ($files && is_array($files)) {
+                foreach ($files as $file) {
+                    if ($file instanceof UploadedFile && $file->isValid()) {
+                        $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+                        $folder = 'complaints/' . date('Y/m');
+                        $fullPath = $folder . '/' . $fileName;
+                        Storage::disk('secure_documents')->put(
+                            $fullPath,
+                            file_get_contents($file->getRealPath())
+                        );
+                        $this->mediaRepo->create([
+                            'Media' => $fullPath,
+                            'ComplaintId' => $request['ComplaintId'],
+                        ]);
+                    }
+                }
+            }
+            $data = [];
+            $code = 200;
+            $message = 'User Complaint response created successfully!';
+            return ['data' => $data, 'message' => $message, 'code' => $code];
+        });
+    }
+    public function getTracing($id)
+    {
+        $data = $this->complaintStatusRepo->getTracing($id);
+        $code = 200;
+        $message = 'User Complaint tracing retrieved successfully!';
+        return ['data' => $data, 'message' => $message, 'code' => $code];
     }
 }

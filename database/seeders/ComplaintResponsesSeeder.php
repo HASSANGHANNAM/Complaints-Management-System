@@ -63,4 +63,3 @@ class ComplaintResponsesSeeder extends Seeder
         });
     }
 }
-

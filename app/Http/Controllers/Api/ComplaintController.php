@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Complaints\CreateComplaintRequest;
 use App\Http\Requests\Complaints\AddAttachmentRequest;
+use App\Http\Requests\Complaints\CreateResponseRequest;
+use App\Http\Requests\Complaints\CreateUserResponseRequest;
 use App\Http\Requests\MyComplaintsRequest;
 
 use App\Services\ComplaintService;
@@ -77,6 +79,42 @@ class ComplaintController extends Controller
     {
         try {
             $data = $this->complaintService->getComplaintTracking($id);
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (Throwable $th) {
+            return Response::Error([], $th->getMessage());
+        }
+    }
+    public function getComplaintRespons($id): JsonResponse
+    {
+        try {
+            $data = $this->complaintService->getComplaintRespons($id);
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (Throwable $th) {
+            return Response::Error([], $th->getMessage());
+        }
+    }
+    public function createComplaintRespons(CreateResponseRequest $request): JsonResponse
+    {
+        try {
+            $data = $this->complaintService->createComplaintRespons($request->validated());
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (Throwable $th) {
+            return Response::Error([], $th->getMessage());
+        }
+    }
+    public function createRespons(CreateUserResponseRequest $request): JsonResponse
+    {
+        try {
+            $data = $this->complaintService->createComplaintRespons($request->validated());
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (Throwable $th) {
+            return Response::Error([], $th->getMessage());
+        }
+    }
+    public function getTracing($id): JsonResponse
+    {
+        try {
+            $data = $this->complaintService->getTracing($id);
             return Response::success($data['data'], $data['message'], $data['code']);
         } catch (Throwable $th) {
             return Response::Error([], $th->getMessage());
