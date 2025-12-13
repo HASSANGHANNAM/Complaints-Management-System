@@ -44,5 +44,23 @@ class GovernmentAgencySectionServiceRepository implements GovernmentAgencySectio
     {
         return $this->service->find($id);
     }
-}
+    public function allServices($request = [], $id): array
+    {
+        $query = GovernmentAgencySectionService::where('SectionId', $id)
+            ->select([
+                'id',
+                'NameAr',
+                'NameEn',
+                'DescriptionAr',
+                'DescriptionEn'
+            ]);
+        if (isset($request['NameAr']) && !empty($request['NameAr'])) {
+            $query->where('NameAr', 'like', '%' . $request['NameAr'] . '%');
+        }
 
+        if (isset($request['NameEn']) && !empty($request['NameEn'])) {
+            $query->where('NameEn', 'like', '%' . $request['NameEn'] . '%');
+        }
+        return $query->get()->toArray();
+    }
+}

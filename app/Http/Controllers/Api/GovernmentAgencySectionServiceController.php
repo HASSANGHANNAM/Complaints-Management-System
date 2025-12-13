@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateSectionServiceRequest;
+use App\Http\Requests\GetServicesRequest;
 use App\Http\Requests\UpdateSectionServiceRequest;
 use App\Services\GovernmentAgencySectionServiceService;
 use App\Http\Responses\Response;
@@ -58,7 +59,16 @@ class GovernmentAgencySectionServiceController extends Controller
             return Response::Error([], $e->getMessage());
         }
     }
-
+    public function getServices(GetServicesRequest $request, $id): JsonResponse
+    {
+        try {
+            $data = $this->service->getServices($request->validated(), $id);
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (Throwable $th) {
+            $message = $th->getMessage();
+            return Response::Error([], $message);
+        }
+    }
     // public function list(): JsonResponse
     // {
     //     try {

@@ -122,7 +122,8 @@ class GovernmentAgencyEmployeeService
 
     public function listEmployees(): array
     {
-        $data = $this->employeeRepo->all();
+
+        $data = $this->employeeRepo->allInMyAgency();
 
         return [
             'data' => $data->toArray(),

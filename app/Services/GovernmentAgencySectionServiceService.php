@@ -64,7 +64,13 @@ class GovernmentAgencySectionServiceService
 
         return ['data' => $service, 'message' => 'Service retrieved successfully!', 'code' => 200];
     }
-
+    public function getServices($request, $id): array
+    {
+        $data = $this->serviceRepo->allServices($request, $id);
+        $code = 200;
+        $message = 'Agencies retrieved successfully!';
+        return ['data' => $data, 'message' => $message, 'code' => $code];
+    }
     // public function listServices(): array
     // {
     //     $data = $this->serviceRepo->all();

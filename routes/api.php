@@ -47,6 +47,8 @@ Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
     Route::post('/createComplaintRespons', [ComplaintController::class, 'createComplaintRespons'])->middleware(['permission:create complaint respons']);
     Route::post('/createRespons', [ComplaintController::class, 'createRespons'])->middleware(['permission:create respons']);
     Route::get('/getTracing/{id}', [ComplaintController::class, 'getTracing'])->middleware(['permission:get Tracing']);
+    Route::get('/getFullAgencies', [GovernmentAgencyController::class, 'getFullAgencies'])->middleware(['permission:get full agencies']);
+    Route::get('/getServices/{id}', [GovernmentAgencySectionServiceController::class, 'getServices']); //->middleware(['permission:get services']);
 
     Route::middleware(['permission:agencyManager'])->group(function () {
 

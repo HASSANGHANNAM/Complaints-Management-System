@@ -12,5 +12,5 @@ interface GovernmentAgencyEmployeeRepositoryInterface
     public function update(GovernmentAgencyEmployee $employee, array $data): bool;
     public function delete(int $id): bool;
     public function findById(int $id): ?GovernmentAgencyEmployee;
+    public function allInMyAgency(): array;
 }
-

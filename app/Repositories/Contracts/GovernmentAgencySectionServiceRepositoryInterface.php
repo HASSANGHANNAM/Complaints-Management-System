@@ -12,5 +12,5 @@ interface GovernmentAgencySectionServiceRepositoryInterface
     public function update(GovernmentAgencySectionService $service, array $data): bool;
     public function delete(int $id): bool;
     public function findById(int $id): ?GovernmentAgencySectionService;
+    public function allServices(array $request = [], $id): array;
 }
-

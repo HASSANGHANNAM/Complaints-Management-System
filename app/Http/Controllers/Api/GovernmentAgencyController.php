@@ -7,6 +7,7 @@ use App\Http\Requests\GovernmentAgency\StoreAgencyRequest;
 use App\Http\Requests\GovernmentAgency\UpdateAgencyRequest;
 use App\Http\Requests\GovernmentAgency\SearchAgencyRequest;
 use App\Http\Requests\GetAgenciesRequest;
+use App\Http\Requests\GetFullAgenciesRequest;
 use App\Http\Requests\GetSectionsRequest;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -93,6 +94,16 @@ class GovernmentAgencyController extends Controller
     {
         try {
             $data = $this->governmentAgencyServices->searchAgencies($request->validated());
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (Throwable $th) {
+            $message = $th->getMessage();
+            return Response::Error([], $message);
+        }
+    }
+    public function getFullAgencies(GetFullAgenciesRequest $request): JsonResponse
+    {
+        try {
+            $data = $this->governmentAgencyServices->getFullAgencies($request->validated());
             return Response::success($data['data'], $data['message'], $data['code']);
         } catch (Throwable $th) {
             $message = $th->getMessage();

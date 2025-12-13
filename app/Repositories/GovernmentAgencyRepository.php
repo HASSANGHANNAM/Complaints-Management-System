@@ -101,4 +101,92 @@ class GovernmentAgencyRepository implements GovernmentAgencyRepositoryInterface
     {
         return $this->agency->find($id);
     }
+    // public function allActiveWithDetails($request = []): array
+    // {
+    //     $query = GovernmentAgency::where('Status', true);
+    //     $query->select([
+    //         'Id',
+    //         'NameAr',
+    //         'NameEn',
+    //         'DescriptionAr',
+    //         'DescriptionEn',
+    //         'LocationAr',
+    //         'LocationEn',
+    //         'WorkingStartTime',
+    //         'WorkingEndTime',
+    //         'Status',
+    //         'ParentId',
+    //         'ManagerId',
+    //     ]);
+    //     if (isset($request['NameAr']) && !empty($request['NameAr'])) {
+    //         $query->where('NameAr', 'like', '%' . $request['NameAr'] . '%');
+    //     }
+    //     if (isset($request['NameEn']) && !empty($request['NameEn'])) {
+    //         $query->where('NameEn', 'like', '%' . $request['NameEn'] . '%');
+    //     }
+
+    //     return $query->get()->toArray();
+    // }
+    public function allActiveWithDetails($request = []): array
+    {
+        $query = GovernmentAgency::where('agencies.Status', true)
+            ->leftJoin('users', 'agencies.ManagerId', '=', 'users.id')
+            ->select([
+                'agencies.id',
+                'agencies.NameAr',
+                'agencies.NameEn',
+                'agencies.DescriptionAr',
+                'agencies.DescriptionEn',
+                'agencies.LocationAr',
+                'agencies.LocationEn',
+                'agencies.WorkingStartTime',
+                'agencies.WorkingEndTime',
+                'agencies.Status',
+                'agencies.ParentId',
+                'agencies.ManagerId',
+                'users.FirstnameAr',
+                'users.FirstnameEn',
+                'users.LastnameAr',
+                'users.LastnameEn',
+                'users.MiddlenameAr',
+                'users.MiddlenameEn',
+                'users.BirthPlaceAr',
+                'users.BirthPlaceEn',
+                'users.BirthDate',
+                'users.NationalNumber',
+                'users.CurrentLocationAr',
+                'users.CurrentLocationEn',
+                'users.ContactNumber',
+                'users.Email',
+                'users.IdFrontFace',
+                'users.IdBackFace'
+            ]);
+
+        if (isset($request['NameAr']) && !empty($request['NameAr'])) {
+            $query->where('agencies.NameAr', 'like', '%' . $request['NameAr'] . '%');
+        }
+        if (isset($request['NameEn']) && !empty($request['NameEn'])) {
+            $query->where('agencies.NameEn', 'like', '%' . $request['NameEn'] . '%');
+        }
+
+        $results = $query->get();
+
+        $results->transform(function ($item) {
+            if (isset($item->IdFrontFace)) {
+                $item->IdFrontFace = url("/api/users/{$item->ManagerId}/id-front");
+            } else {
+                $item->IdFrontFace = null;
+            }
+
+            if (isset($item->IdBackFace)) {
+                $item->IdBackFace = url("/api/users/{$item->ManagerId}/id-back");
+            } else {
+                $item->IdBackFace = null;
+            }
+
+            return $item;
+        });
+
+        return $results->toArray();
+    }
 }

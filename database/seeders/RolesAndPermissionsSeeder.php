@@ -25,13 +25,17 @@ class RolesAndPermissionsSeeder extends Seeder
             'get complaint respons',
             'create complaint respons',
             'create respons',
-            'get Tracing'
+            'get Tracing',
+            'get full agencies',
+            'get services'
         ];
         foreach ($permissions as $permissionsname) {
             Permission::findOrCreate($permissionsname);
         }
 
-        $adminRole->givePermissionTo([]);
+        $adminRole->givePermissionTo([
+            'get full agencies'
+        ]);
         $userRole->givePermissionTo([
             'create complaints',
             'get agencies',
@@ -46,7 +50,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'create complaint respons',
             'create respons'
         ]);
-        $agencyManagerRole->givePermissionTo([]);
+        $agencyManagerRole->givePermissionTo([
+            'agencyManager',
+            'get services'
+        ]);
 
         // $admin->assignRole($adminRole);
         // $permissions = $admin->permissions()->pluck('name')->toArray();

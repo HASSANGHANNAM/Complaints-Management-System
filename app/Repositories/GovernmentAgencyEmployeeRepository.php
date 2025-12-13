@@ -12,9 +12,8 @@ class GovernmentAgencyEmployeeRepository implements GovernmentAgencyEmployeeRepo
 
     public function all(): Collection
     {
-        return new Collection(GovernmentAgencyEmployee::class, GovernmentAgencyEmployee::all()->toArray());
+        return new Collection(GovernmentAgencyEmployee::all());
     }
-
     public function create(array $data): GovernmentAgencyEmployee
     {
         return $this->employee->create([
@@ -41,6 +40,10 @@ class GovernmentAgencyEmployeeRepository implements GovernmentAgencyEmployeeRepo
     }
 
     public function findById(int $id): ?GovernmentAgencyEmployee
+    {
+        return $this->employee->find($id);
+    }
+    public function allInMyAgency(): array
     {
         return $this->employee->find($id);
     }
