@@ -27,6 +27,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'create respons',
             'get Tracing',
             'get full agencies',
+            'create manager',
             'get services'
         ];
         foreach ($permissions as $permissionsname) {
@@ -34,7 +35,9 @@ class RolesAndPermissionsSeeder extends Seeder
         }
 
         $adminRole->givePermissionTo([
-            'get full agencies'
+            'get full agencies',
+            'create manager'
+
         ]);
         $userRole->givePermissionTo([
             'create complaints',

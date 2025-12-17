@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean('CanResponseToComplaint')->default(false);
             $table->boolean('CanChangeComplaintStatus')->default(false);
             $table->foreignId('UserId')->constrained('users');
+            $table->unsignedBigInteger('SectionId');
             $table->timestamps();
         });
     }

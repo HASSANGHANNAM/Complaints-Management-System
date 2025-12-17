@@ -29,4 +29,9 @@ class GovernmentAgencySection extends Model
         return $this->hasMany(GovernmentAgencySectionService::class, 'SectionId');
     }
 
+        public function employees()
+    {
+        return $this->hasMany(GovernmentAgencyEmployee::class,'SectionId');
+    }
+
 }

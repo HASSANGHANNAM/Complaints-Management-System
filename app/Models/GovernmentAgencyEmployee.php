@@ -15,6 +15,7 @@ class GovernmentAgencyEmployee extends Model
         'CanResponseToComplaint',
         'CanChangeComplaintStatus',
         'UserId',
+        'SectionId',
         'GovernmentAgencyEmploymentTypeId'
     ];
 

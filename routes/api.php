@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\GovernmentAgencyEmployeeController;
 use App\Http\Controllers\Api\GovernmentAgencySectionServiceController;
 use App\Http\Controllers\Api\GovernmentAgencySectionController;
 use App\Http\Controllers\Api\ComplaintStatusController;
+use App\Http\Controllers\Api\GovernmentAgencyManagerController;
 use App\Models\User;
 use App\Models\Media;
 use Illuminate\Http\Request;
@@ -49,6 +50,8 @@ Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
     Route::get('/getTracing/{id}', [ComplaintController::class, 'getTracing'])->middleware(['permission:get Tracing']);
     Route::get('/getFullAgencies', [GovernmentAgencyController::class, 'getFullAgencies'])->middleware(['permission:get full agencies']);
     Route::get('/getServices/{id}', [GovernmentAgencySectionServiceController::class, 'getServices']); //->middleware(['permission:get services']);
+    Route::post('createmanager/{agencyId}',[GovernmentAgencyManagerController::class, 'create'])->middleware(['permission:create manager']);;
+
 
     Route::middleware(['permission:agencyManager'])->group(function () {
 

@@ -191,7 +191,6 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                 $this->userRepo->assignRole($user, 'employee');
                 $employeeIds[] = $user->id;
             }
-
             $agency_employees = [
                 [
                     'EmploymentStatus' => true,
@@ -199,6 +198,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => true,
                     'UserId' => $employeeIds[0],
+                    'SectionId' => 1,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -206,6 +206,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => false,
                     'UserId' => $employeeIds[1],
+                    'SectionId' => 1,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -213,6 +214,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => true,
                     'UserId' => $employeeIds[2],
+                    'SectionId' => 2,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -220,6 +222,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => false,
                     'UserId' => $employeeIds[3],
+                    'SectionId' => 2,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -227,6 +230,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => true,
                     'UserId' => $employeeIds[4],
+                    'SectionId' => 3,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -234,6 +238,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => false,
                     'UserId' => $employeeIds[5],
+                    'SectionId' => 3,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -241,6 +246,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => true,
                     'UserId' => $employeeIds[6],
+                    'SectionId' => 4,
                 ],
                 [
                     'EmploymentStatus' => true,
@@ -248,6 +254,7 @@ class GovernmentAgencyEmployeesSeeder extends Seeder
                     'CanResponseToComplaint' => true,
                     'CanChangeComplaintStatus' => false,
                     'UserId' => $employeeIds[7],
+                    'SectionId' => 5,
                 ],
             ];
 
