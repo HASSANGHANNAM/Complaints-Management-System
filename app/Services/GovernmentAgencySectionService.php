@@ -4,10 +4,12 @@ namespace App\Services;
 
 use App\Repositories\Contracts\GovernmentAgencySectionRepositoryInterface;
 use App\Models\GovernmentAgency;
+use App\Services\NotificationService;
 class GovernmentAgencySectionService
 {
     public function __construct(
-        private GovernmentAgencySectionRepositoryInterface $sectionRepo
+        private GovernmentAgencySectionRepositoryInterface $sectionRepo,
+        private NotificationService $notificationService
     ) {}
 
 public function createSection(array $data): array
@@ -24,6 +26,14 @@ public function createSection(array $data): array
 
     $data['AgencyId'] = $agency->id;
     $section = $this->sectionRepo->create($data);
+
+        // notification
+    $this->notificationService->send(
+        auth()->user(),
+        'إنشاء قسم جديد',
+        "تم إنشاء قسم جديد ({$section->NameAr}) بنجاح",
+        'section_created'
+    );
 
     return [
         'data' => $section,
@@ -44,6 +54,14 @@ public function createSection(array $data): array
         unset($data['AgencyId']);
 
         $this->sectionRepo->update($section, $data);
+
+        //notification
+        $this->notificationService->send(
+        auth()->user(),
+        'تحديث قسم',
+        "تم تحديث بيانات القسم ({$section->NameAr})",
+        'section_updated'
+         );
 
         return [
             'data' => $section,

@@ -32,7 +32,8 @@ class UserRepository implements UserRepositoryInterface
             'ContactNumber' => $data['ContactNumber'],
             'Email' => $data['Email'],
             'password' => Hash::make($data['password']),
-            'email_verified_at' => $data['email_verified_at'] ?? null
+            'email_verified_at' => $data['email_verified_at'] ?? null,
+            'fcm_token'=>$data['fcm_token'] ?? null
         ]);
     }
     public function all(): Collection

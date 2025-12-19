@@ -4,12 +4,14 @@ namespace App\Services;
 
 use App\Repositories\Contracts\GovernmentAgencySectionServiceRepositoryInterface;
 use App\Models\GovernmentAgencySection;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;
 
 class GovernmentAgencySectionServiceService
 {
     public function __construct(
-        private GovernmentAgencySectionServiceRepositoryInterface $serviceRepo
+        private GovernmentAgencySectionServiceRepositoryInterface $serviceRepo,
+        private NotificationService $notificationService
     ) {}
 
     public function createService(int $sectionId, array $data): array
@@ -27,6 +29,13 @@ class GovernmentAgencySectionServiceService
         $data['SectionId'] = $sectionId;
 
         $service = $this->serviceRepo->create($data);
+        //notification
+        $this->notificationService->send(
+        auth()->user(),
+        'إضافة خدمة جديدة',
+        "تمت إضافة خدمة جديدة ({$service->NameAr}) ضمن القسم ({$section->NameAr})",
+        'service_created'
+    );
 
         return ['data' => $service, 'message' => 'Service created successfully!', 'code' => 201];
     }

@@ -4,13 +4,15 @@ namespace App\Services;
 
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\GovernmentAgencyRepositoryInterface;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 
 class GovernmentAgencyManagerService
 {
     public function __construct(
         private UserRepositoryInterface $userRepo,
-        private GovernmentAgencyRepositoryInterface $agencyRepo
+        private GovernmentAgencyRepositoryInterface $agencyRepo,
+        private NotificationService $notificationService
     ) {}
 
     public function createManager(array $data, int $agencyId): array
@@ -41,6 +43,14 @@ class GovernmentAgencyManagerService
                 'ManagerId' => $manager->id
             ]);
         });
+
+            // notification
+        $this->notificationService->send(
+            $manager,
+            'تم تعيينك مديرًا',
+            "تم تعيينك مديرًا لجهة {$agency->NameAr}",
+            'agency_manager_assigned'
+        );
 
         return [
             'data' => [

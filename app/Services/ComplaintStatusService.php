@@ -4,12 +4,14 @@ namespace App\Services;
 
 use App\Repositories\Contracts\ComplaintRepositoryInterface;
 use App\Repositories\Contracts\ComplaintStatusRepositoryInterface;
+use App\Services\NotificationService;
 
 class ComplaintStatusService
 {
     public function __construct(
         private ComplaintRepositoryInterface $complaintRepo,
-        private ComplaintStatusRepositoryInterface $complaintStatusRepo
+        private ComplaintStatusRepositoryInterface $complaintStatusRepo,
+        private NotificationService $notificationService
     ) {}
 
     public function updateComplaintStatus(int $complaintId, array $data): array
@@ -52,6 +54,16 @@ class ComplaintStatusService
             'Status' => $data['Status'],
             'ComplaintId' => $complaintId,
         ]);
+
+            // notification
+        if ($complaint->user) {
+            $this->notificationService->send(
+                $complaint->user,
+                'تحديث حالة الشكوى',
+                "تم تحديث حالة الشكوى إلى: {$data['Status']}",
+                'complaint_status'
+            );
+        }
 
         return [
             'data' => $complaintStatus,

@@ -144,7 +144,9 @@ class RegisterUser extends FormRequest
                 'string',
                 'min:8',
                 'confirmed'
-            ]
+            ],
+            'fcm_token' => ['nullable','string']
+
         ];
     }
 

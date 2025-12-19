@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\EmailVerificationRepositoryInterface;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -18,7 +19,8 @@ class AuthServices
     public function __construct(
         private UserRepositoryInterface $userRepo,
         private EmailVerificationRepositoryInterface $emailRepo,
-        private TokenServices $tokenService
+        private TokenServices $tokenService,
+        private NotificationService $notificationService
     ) {}
 
     public function registerUser($request): array
@@ -35,6 +37,13 @@ class AuthServices
             $user = $this->userRepo->create($request);
             $this->userRepo->assignRole($user, 'user');
             $this->emailRepo->sendCode($user);
+                // notification
+            $this->notificationService->send(
+                $user,
+                'تم إنشاء حساب مريض',
+                "مرحباً {$user->FirstnameAr}، تم إنشاء حسابك بنجاح",
+                'user_created'
+            );
             $data = $this->tokenService->createAuthTokens($user);
             $code = 200;
             $message = 'User created successfully!';
@@ -61,6 +70,13 @@ class AuthServices
 
 
         $data = $this->tokenService->createAuthTokens($user);
+        //notification
+        $this->notificationService->send(
+                $user,
+                'تسجيل دخول',
+                'تم تسجيل الدخول بنجاح',
+                'login'
+        );
         $message = 'Login successful';
         $code = 200;
         return [
@@ -79,6 +95,13 @@ class AuthServices
     public function logout($user): array
     {
         $this->tokenService->revokeAllTokens($user);
+        //notification
+        $this->notificationService->send(
+            $user,
+            'تسجيل خروج',
+            'تم تسجيل الخروج من الحساب',
+            'logout'
+        );
         $data = [];
         $message = 'Logged out successfully';
         $code = 200;

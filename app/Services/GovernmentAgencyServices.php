@@ -6,6 +6,7 @@ use App\Models\GovernmentAgency;
 use App\Models\GovernmentAgencySection;
 use App\Repositories\Contracts\GovernmentAgencyRepositoryInterface;
 use App\Repositories\Contracts\GovernmentAgencySectionRepositoryInterface;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -14,7 +15,8 @@ class GovernmentAgencyServices
 {
     public function __construct(
         private GovernmentAgencyRepositoryInterface $governmentAgencyRepo,
-        private GovernmentAgencySectionRepositoryInterface $governmentAgencySectionRepo
+        private GovernmentAgencySectionRepositoryInterface $governmentAgencySectionRepo,
+        private NotificationService $notificationService
     ) {}
 
     public function getAgencies($request): array

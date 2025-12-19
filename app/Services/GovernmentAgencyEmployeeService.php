@@ -6,12 +6,14 @@ use App\Repositories\Contracts\GovernmentAgencyEmployeeRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Services\NotificationService;
 
 class GovernmentAgencyEmployeeService
 {
     public function __construct(
         private GovernmentAgencyEmployeeRepositoryInterface $employeeRepo,
-        private UserRepositoryInterface $userRepo
+        private UserRepositoryInterface $userRepo,
+        private NotificationService $notificationService
     ) {}
 
     public function createEmployee(array $data): array
@@ -32,6 +34,13 @@ class GovernmentAgencyEmployeeService
                 'CanChangeComplaintStatus' => $data['CanChangeComplaintStatus'] ?? false,
                 'UserId' => $user->id,
             ]);
+
+            $this->notificationService->send(
+            $user,
+            'تم إنشاء حساب موظف',
+            'تم إنشاء حسابك كموظف في الجهة الحكومية',
+            'employee_created'
+            );
 
             return [
                 'data' => [
@@ -87,6 +96,12 @@ class GovernmentAgencyEmployeeService
             }
 
             $this->userRepo->update($user, $userData);
+            $this->notificationService->send(
+            $user,
+            'تحديث بيانات الموظف',
+            'تم تحديث بيانات حسابك الوظيفي',
+            'employee_updated'
+             );
         }
 
         return ['data' => $employee, 'message' => 'Employee updated successfully!', 'code' => 200];

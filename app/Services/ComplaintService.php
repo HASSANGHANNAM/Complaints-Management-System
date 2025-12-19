@@ -6,6 +6,7 @@ use App\Repositories\Contracts\ComplaintRepositoryInterface;
 use App\Repositories\Contracts\ComplaintResponseRepositoryInterface;
 use App\Repositories\Contracts\ComplaintStatusRepositoryInterface;
 use App\Repositories\Contracts\MediaRepositoryInterface;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,8 @@ class ComplaintService
         private ComplaintRepositoryInterface $complaintRepo,
         private ComplaintStatusRepositoryInterface $complaintStatusRepo,
         private MediaRepositoryInterface $mediaRepo,
-        private ComplaintResponseRepositoryInterface $complaintResponseRepo
+        private ComplaintResponseRepositoryInterface $complaintResponseRepo,
+        private NotificationService $notificationService
     ) {}
 
     public function createComplaint($request)
@@ -58,6 +60,13 @@ class ComplaintService
                     }
                 }
             }
+                // notification
+            $this->notificationService->send(
+                auth()->user(),
+                'تم إنشاء شكوى',
+                'تم تسجيل شكواك بنجاح وسيتم متابعتها',
+                'complaint_created'
+            );
 
             $data = [];
             $code = 200;
@@ -131,6 +140,13 @@ class ComplaintService
                     }
                 }
             }
+            //notification
+             $this->notificationService->send(
+                auth()->user(),
+                'رد جديد على الشكوى',
+                'تم إضافة رد جديد على الشكوى الخاصة بك',
+                'complaint_response'
+             );
             $data = [];
             $code = 200;
             $message = 'User Complaint response created successfully!';

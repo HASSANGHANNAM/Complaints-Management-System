@@ -37,6 +37,7 @@ class User extends Authenticatable
         'ContactNumber',
         'Email',
         'password',
+        'fcm_token',
         'email_verified_at',
 
     ];
