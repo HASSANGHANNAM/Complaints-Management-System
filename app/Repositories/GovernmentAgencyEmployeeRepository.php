@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\GovernmentAgencyEmployee;
 use App\Repositories\Contracts\GovernmentAgencyEmployeeRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Collection\Collection;
 
 class GovernmentAgencyEmployeeRepository implements GovernmentAgencyEmployeeRepositoryInterface
@@ -44,8 +45,61 @@ class GovernmentAgencyEmployeeRepository implements GovernmentAgencyEmployeeRepo
     {
         return $this->employee->find($id);
     }
-    public function allInMyAgency(): array
+    public function allInMyAgency($request): array
     {
-        return $this->employee->find($id);
+        $query = GovernmentAgencyEmployee::query()
+            ->join('agency_sections', 'agency_employees.SectionId', '=', 'agency_sections.id')
+            ->join('agencies', 'agency_sections.AgencyId', '=', 'agencies.id')
+            ->join('users', 'agency_employees.UserId', '=', 'users.id')
+            ->where('agencies.ManagerId', auth()->user()->id)
+            ->select([
+                'agency_employees.id',
+                'agency_employees.EmploymentStatus',
+                'agency_employees.EmploymentDate',
+                'agency_employees.CanResponseToComplaint',
+                'agency_employees.CanChangeComplaintStatus',
+                'users.FirstnameAr',
+                'users.FirstnameEn',
+                'users.LastnameAr',
+                'users.LastnameEn',
+                'users.MiddlenameAr',
+                'users.MiddlenameEn',
+                'users.BirthPlaceAr',
+                'users.BirthPlaceEn',
+                'users.BirthDate',
+                'users.NationalNumber',
+                'users.Email',
+                'users.ContactNumber',
+                'users.CurrentLocationAr',
+                'users.CurrentLocationEn',
+                'users.IdFrontFace',
+                'users.IdBackFace',
+                'agency_sections.NameAr as section_name_ar',
+                'agency_sections.NameEn as section_name_en',
+                'agencies.NameAr as agency_name_ar',
+                'agencies.NameEn as agency_name_en'
+            ]);
+        if (isset($request['section_id']) && !empty($request['section_id'])) {
+            $query->where('agency_employees.SectionId', $request['section_id']);
+        }
+        $results = $query->get();
+
+        $results->transform(function ($item) {
+            if (isset($item->IdFrontFace)) {
+                $item->IdFrontFace = url("/api/users/{$item->ManagerId}/id-front");
+            } else {
+                $item->IdFrontFace = null;
+            }
+
+            if (isset($item->IdBackFace)) {
+                $item->IdBackFace = url("/api/users/{$item->ManagerId}/id-back");
+            } else {
+                $item->IdBackFace = null;
+            }
+
+            return $item;
+        });
+
+        return $results->toArray();
     }
 }

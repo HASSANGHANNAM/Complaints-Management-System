@@ -36,10 +36,10 @@ class GovernmentAgencyEmployeeService
             ]);
 
             $this->notificationService->send(
-            $user,
-            'تم إنشاء حساب موظف',
-            'تم إنشاء حسابك كموظف في الجهة الحكومية',
-            'employee_created'
+                $user,
+                'تم إنشاء حساب موظف',
+                'تم إنشاء حسابك كموظف في الجهة الحكومية',
+                'employee_created'
             );
 
             return [
@@ -97,11 +97,11 @@ class GovernmentAgencyEmployeeService
 
             $this->userRepo->update($user, $userData);
             $this->notificationService->send(
-            $user,
-            'تحديث بيانات الموظف',
-            'تم تحديث بيانات حسابك الوظيفي',
-            'employee_updated'
-             );
+                $user,
+                'تحديث بيانات الموظف',
+                'تم تحديث بيانات حسابك الوظيفي',
+                'employee_updated'
+            );
         }
 
         return ['data' => $employee, 'message' => 'Employee updated successfully!', 'code' => 200];
@@ -135,13 +135,13 @@ class GovernmentAgencyEmployeeService
         ];
     }
 
-    public function listEmployees(): array
+    public function listEmployees($request): array
     {
 
-        $data = $this->employeeRepo->allInMyAgency();
+        $data = $this->employeeRepo->allInMyAgency($request);
 
         return [
-            'data' => $data->toArray(),
+            'data' => $data,
             'message' => 'Employees list retrieved successfully!',
             'code' => 200
         ];

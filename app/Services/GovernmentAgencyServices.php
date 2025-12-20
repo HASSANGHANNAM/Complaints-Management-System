@@ -278,4 +278,11 @@ class GovernmentAgencyServices
             ];
         }
     }
+    public function listManagers(): array
+    {
+        $data = $this->governmentAgencyRepo->allManagers();
+        $code = 200;
+        $message = 'Managers retrieved successfully!';
+        return ['data' => $data, 'message' => $message, 'code' => $code];
+    }
 }

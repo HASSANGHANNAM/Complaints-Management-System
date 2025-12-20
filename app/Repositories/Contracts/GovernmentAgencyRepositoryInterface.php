@@ -12,6 +12,7 @@ interface GovernmentAgencyRepositoryInterface
     public function allWithRelations(array $relations = []): array;
     public function allActive(array $request = []): array;
     public function allActiveWithDetails(array $request = []): array;
+    public function allManagers(): array;
     public function create(array $data): GovernmentAgency;
     public function update(GovernmentAgency $agency, array $data): bool;
     public function delete(int $id): bool;

@@ -110,4 +110,14 @@ class GovernmentAgencyController extends Controller
             return Response::Error([], $message);
         }
     }
+    public function listManagers(): JsonResponse
+    {
+        try {
+            $data = $this->governmentAgencyServices->listManagers();
+            return Response::success($data['data'], $data['message'], $data['code']);
+        } catch (Throwable $th) {
+            $message = $th->getMessage();
+            return Response::Error([], $message);
+        }
+    }
 }

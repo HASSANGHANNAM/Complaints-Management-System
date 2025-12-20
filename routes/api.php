@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\GovernmentAgencyManagerController;
 use App\Models\User;
 use App\Models\Media;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,13 +28,18 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
+// Route::get('/run-backup', function () {
+//     Artisan::call('backup:run');
+//     return 'Backup completed';
+// });
 
 Route::post('/registerUser', [AuthController::class, 'registerUser']);
 Route::post('/refreshToken', [AuthController::class, 'refreshToken']);
 Route::post('/resend', [AuthController::class, 'resendCode']);
 Route::post('/verify', [AuthController::class, 'verifyCode']);
-Route::post('/login', [AuthController::class, 'login']);
-
+// Route::middleware(['throttle:5,1'])->group(function sssssssssssssssssss() {
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
+// });
 Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/getProfile', [AuthController::class, 'getProfile']);
@@ -50,7 +56,8 @@ Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
     Route::get('/getTracing/{id}', [ComplaintController::class, 'getTracing'])->middleware(['permission:get Tracing']);
     Route::get('/getFullAgencies', [GovernmentAgencyController::class, 'getFullAgencies'])->middleware(['permission:get full agencies']);
     Route::get('/getServices/{id}', [GovernmentAgencySectionServiceController::class, 'getServices']); //->middleware(['permission:get services']);
-    Route::post('createmanager/{agencyId}',[GovernmentAgencyManagerController::class, 'create'])->middleware(['permission:create manager']);;
+    Route::post('createmanager/{agencyId}', [GovernmentAgencyManagerController::class, 'create'])->middleware(['permission:create manager']);;
+    Route::get('/managers', [GovernmentAgencyController::class, 'listManagers']);
 
 
     Route::middleware(['permission:agencyManager'])->group(function () {

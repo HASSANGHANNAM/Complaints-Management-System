@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\GovernmentAgency;
+use App\Models\User;
 use App\Repositories\Contracts\GovernmentAgencyRepositoryInterface;
 use Ramsey\Collection\Collection;
 
@@ -187,6 +188,61 @@ class GovernmentAgencyRepository implements GovernmentAgencyRepositoryInterface
             return $item;
         });
 
+        return $results->toArray();
+    }
+    public function allManagers(): array
+    {
+        $query = User::query();
+
+        $results = $query->join('agencies', 'agencies.ManagerId', '=', 'users.id')
+            ->select([
+                'users.id',
+                'agencies.id as agency_id',
+                'agencies.NameAr',
+                'agencies.NameEn',
+                'agencies.DescriptionAr',
+                'agencies.DescriptionEn',
+                'agencies.LocationAr',
+                'agencies.LocationEn',
+                'agencies.WorkingStartTime',
+                'agencies.WorkingEndTime',
+                'agencies.Status',
+                'agencies.ParentId',
+                'agencies.ManagerId',
+                'users.FirstnameAr',
+                'users.FirstnameEn',
+                'users.LastnameAr',
+                'users.LastnameEn',
+                'users.MiddlenameAr',
+                'users.MiddlenameEn',
+                'users.BirthPlaceAr',
+                'users.BirthPlaceEn',
+                'users.BirthDate',
+                'users.NationalNumber',
+                'users.CurrentLocationAr',
+                'users.CurrentLocationEn',
+                'users.ContactNumber',
+                'users.Email',
+                'users.IdFrontFace',
+                'users.IdBackFace'
+            ])->get();
+        $results->transform(function ($item) {
+            if (isset($item->IdFrontFace)) {
+                $item->IdFrontFace = url("/api/users/{$item->ManagerId}/id-front");
+            } else {
+                $item->IdFrontFace = null;
+            }
+
+            if (isset($item->IdBackFace)) {
+                $item->IdBackFace = url("/api/users/{$item->ManagerId}/id-back");
+            } else {
+                $item->IdBackFace = null;
+            }
+
+            return $item;
+        });
+
+        // dd($results);
         return $results->toArray();
     }
 }

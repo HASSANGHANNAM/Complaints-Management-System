@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Services\GovernmentAgencyEmployeeService;
 use App\Http\Requests\CreateEmployeeRequest;
+use App\Http\Requests\GetEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Responses\Response;
 use Illuminate\Http\JsonResponse;
@@ -54,10 +55,10 @@ class GovernmentAgencyEmployeeController extends Controller
         }
     }
 
-    public function listEmployees(): JsonResponse
+    public function listEmployees(GetEmployeeRequest $request): JsonResponse
     {
         try {
-            $data = $this->employeeService->listEmployees();
+            $data = $this->employeeService->listEmployees($request->validated());
             return Response::success($data['data'], $data['message'], $data['code']);
         } catch (Throwable $th) {
             return Response::Error([], $th->getMessage());
